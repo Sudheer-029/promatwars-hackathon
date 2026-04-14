@@ -1,0 +1,18 @@
+{
+  "name": "stadiumflow-ai",
+  "version": "1.0.0",
+  "description": "StadiumFlow AI Operations Dashboard",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "start": "npx serve ."
+  },
+  "dependencies": {
+    "firebase": "^10.8.0",
+    "@google/generative-ai": "^0.2.1",
+    "@googlemaps/js-api-loader": "^1.16.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

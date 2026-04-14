@@ -19,12 +19,14 @@ const geminiService = {
                     const best = routingService.getOptimalRestroom(state.accessibilityNeeded);
                     if(best) {
                         response = `Based on live camera data, I recommend **${best.name}**. The wait is only about **${best.queueTime} minutes**, and it's free of congestion.`;
+                        if(window.showGoogleMapsRoute) window.showGoogleMapsRoute(best.name);
                     } else {
                         response = "All restrooms are currently busy. It might be best to wait a few minutes.";
                     }
                 } else if (query.includes("food") || query.includes("hungry") || query.match(/\beat\b/)) {
                     const best = routingService.getOptimalFood();
                     response = `Your fastest food option is **${best.name}** at ${best.location}. The queue is currently **${best.queueTime} minutes**.`;
+                    if(window.showGoogleMapsRoute) window.showGoogleMapsRoute(best.name);
                 } else if (query.includes("seat")) {
                     const section = venueData.sections.find(s => s.id === state.targetSeatId);
                     const sectionName = section ? section.name : "your section";
@@ -33,6 +35,7 @@ const geminiService = {
                     const gateName = gateObj ? gateObj.name : "the nearest concourse";
                     
                     response = `The fastest route to **${sectionName}** from your location is directly through **${gateName}**. Live sensors show that path is currently flowing smoothly!`;
+                    if(window.showGoogleMapsRoute) window.showGoogleMapsRoute(sectionName);
                 } else if (query.includes("gate") || query.includes("congested")) {
                     const gateData = routingService.getGateRecommendation(state.currentZoneId);
                     if(gateData.status === 'congested' && gateData.alternate) {

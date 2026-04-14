@@ -5,7 +5,30 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
+    bindComplaintPortal();
 });
+
+function bindComplaintPortal() {
+    const btn = document.getElementById('btn-report-issue');
+    if(btn) {
+        btn.addEventListener('click', () => {
+            const promptStr = prompt("Describe your issue (e.g., Spill at Section 102):");
+            if (promptStr) {
+                // Submit incident to mocked Firebase backend
+                const state = getAppState();
+                liveStatus.incidents.push({
+                    id: 'fan_ticket_' + Date.now(),
+                    zone: state.currentZoneId,
+                    type: 'fan_complaint',
+                    alert: `FAN REPORT: ${promptStr}`
+                });
+                alert("Report submitted! Ops Team has been notified immediately.");
+                // Sync UI
+                if(window.renderOpsDashboard) window.renderOpsDashboard();
+            }
+        });
+    }
+}
 
 function initApp() {
     console.log("StadiumFlow AI booting up...");

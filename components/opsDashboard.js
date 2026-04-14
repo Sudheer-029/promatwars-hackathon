@@ -37,6 +37,12 @@ function renderOpsDashboard() {
             </div>
         </div>
 
+        <!-- Fan Complaint Queue -->
+        <div class="card" style="grid-column: span 2; border-color: var(--brand-warning);">
+            <h2>🚨 Live Fan Reports</h2>
+            <div id="ops-complaints-list"></div>
+        </div>
+
         <!-- Hotspots card -->
         <div class="card">
             <h2>Crowd Hotspots</h2>
@@ -70,6 +76,25 @@ function renderOpsDashboard() {
         }
     }
 
+    // Populate Fan Complaints
+    const complaintsDiv = document.getElementById('ops-complaints-list');
+    const fanTickets = liveStatus.incidents.filter(i => i.type === 'fan_complaint');
+    if(fanTickets.length === 0) {
+        complaintsDiv.innerHTML = "<p style='color: var(--brand-neon);'>No active fan complaints.</p>";
+    } else {
+        fanTickets.forEach(ticket => {
+            const zName = venueData.zones.find(z => z.id === ticket.zone)?.name || ticket.zone;
+            complaintsDiv.innerHTML += `
+                <div style="margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: var(--brand-warning);">[${zName}]</strong> ${ticket.alert}
+                    </div>
+                    <button onclick="window.resolveTicket('${ticket.id}')" style="background: var(--brand-neon); color: #000; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Resolve</button>
+                </div>
+            `;
+        });
+    }
+
     // Bind dispatch button
     document.getElementById('btn-dispatch').addEventListener('click', () => {
         const msg = document.getElementById('action-note').value;
@@ -80,3 +105,11 @@ function renderOpsDashboard() {
     });
 
 }
+
+window.resolveTicket = function(ticketId) {
+    const idx = liveStatus.incidents.findIndex(i => i.id === ticketId);
+    if(idx > -1) {
+        liveStatus.incidents.splice(idx, 1);
+        renderOpsDashboard();
+    }
+};
