@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadiumFlow AI</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span> StadiumFlow <span class="logo-ai">AI</span>
+            </div>
+            <nav class="view-switcher" aria-label="Main Navigation">
+                <button id="btn-fan-view" class="active" aria-pressed="true">Fan Assistant</button>
+                <button id="btn-ops-view" aria-pressed="false">Ops Dashboard</button>
+            </nav>
+            <div class="accessibility-controls">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-accessibility" aria-label="Toggle Wheelchair Accessible Routes">
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label" aria-hidden="true">♿ Accessible Routes</span>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            <!-- FAN ASSISTANT VIEW -->
+            <section id="fan-view" class="view-section active" aria-live="polite">
+                
+                <!-- Alert Banner -->
+                <div id="alert-banner-container"></div>
+
+                <div class="fan-grid">
+                    <!-- Left Column: Context & Map -->
+                    <div class="grid-left">
+                        <div class="card context-card">
+                            <h2>Your Game Context</h2>
+                            <form id="fan-setup-form" onsubmit="event.preventDefault()">
+                                <div class="form-group">
+                                    <label for="current-zone">Current Zone/Gate:</label>
+                                    <select id="current-zone"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="seat-section">Target Seat Section:</label>
+                                    <select id="seat-section"></select>
+                                </div>
+                                <div class="context-chips" id="context-chips">
+                                    <span class="chip" data-status="active">Time to Kickoff: 20 mins</span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Map component placeholder -->
+                        <div class="card map-card" aria-label="Venue Heatmap">
+                            <h2>Venue Live Flow</h2>
+                            <div id="map-view-container" class="map-render-area"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Assistant & Queues -->
+                    <div class="grid-right">
+                        <!-- AI Assistant Box -->
+                        <div class="card ai-card">
+                            <div class="card-header">
+                                <h2>Gemini Assistant ✨</h2>
+                                <span class="live-dot" aria-label="Online"></span>
+                            </div>
+                            <div id="assistant-chat-container" class="chat-window">
+                                <div class="chat-message assistant">
+                                    Welcome! I'm synced with live stadium data. How can I help you navigate today?
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="assistant-input" placeholder="Ask about routes, food, queues..." aria-label="Ask assistant">
+                                <button id="btn-send-chat" aria-label="Send message">→</button>
+                            </div>
+                            <div class="quick-prompts">
+                                <button class="prompt-chip">Fastest way to my seat?</button>
+                                <button class="prompt-chip">Nearest low-queue restroom?</button>
+                            </div>
+                        </div>
+
+                        <!-- Queue Panel -->
+                        <div class="card queue-card">
+                            <h2>Live Queues Near You</h2>
+                            <div id="queue-panel-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OPS DASHBOARD VIEW -->
+            <section id="ops-view" class="view-section" style="display: none;" aria-live="polite">
+                <!-- Ops logic will be dynamically rendered here -->
+                <div id="ops-dashboard-container" class="ops-grid"></div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Logic Modules loaded traditionally to bypass local file API quirks -->
+    <script src="data/venueData.js"></script>
+    <script src="data/liveStatus.js"></script>
+    <script src="services/routingService.js"></script>
+    <script src="services/firebaseService.js"></script>
+    <script src="services/geminiService.js"></script>
+    <script src="components/mapView.js"></script>
+    <script src="components/queuePanel.js"></script>
+    <script src="components/alertBanner.js"></script>
+    <script src="components/assistantPanel.js"></script>
+    <script src="components/opsDashboard.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
